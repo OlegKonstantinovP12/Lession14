@@ -109,3 +109,155 @@ let pairInt: Pair = Pair(first: 10, second: 1)
 let pairChar: Pair<Character> = Pair(first: "A", second: "B")
 
 
+//MARK: - Сложнее
+
+/*
+ 1- Создай класс Cache<Key, Value>, где Key: Hashable.
+ Добавь методы set, get, remove.
+ */
+class Cache<Key: Hashable, Value> {
+    private var cache: [Key: Value] = [:]
+    
+    func set(key: Key, for value: Value) {
+        cache[key] = value
+    }
+    
+    func get() {
+        if !cache.isEmpty {
+            print(cache)
+        } else {
+            print("Cache not found")
+        }
+    }
+    
+    func remove(key: Key) { // Здесь идет обработка опционала в теле метода, а в следующем задании обработка делается вне метода
+        if let removedValue = cache.removeValue(forKey: key) {
+            print("Удален ключ: \(key) со значением \(removedValue)")
+        } else {
+            print("Ключ \(key) в словаре не найден")
+        }
+    }
+    
+}
+
+let dict = Cache<String, String>()
+
+dict.set(key: "Car", for: "BMW")
+dict.get()
+
+dict.set(key: "Fruit", for: "Apple")
+dict.get()
+
+dict.remove(key: "Car")
+dict.get()
+
+/*
+ 2- Класс KeyValueStore
+ Создай дженерик-класс для хранения пар "ключ-значение".
+
+ пример
+ let userAges = KeyValueStore<String, Int>()
+ userAges.set(25, for: "Alice")
+ print(userAges.get(for: "Alice") ?? 0) // 25
+ */
+
+class KeyValueStore<Key: Hashable, Value> {
+    var storage: [Key: Value] = [:]
+    
+    func set(_ value: Value, for key: Key) {
+        storage[key] = value
+    }
+    
+    func get(for key: Key) -> Value? {
+        storage[key]
+    }
+}
+
+let userAges = KeyValueStore<String, Int>()
+userAges.set(25, for: "Alice")
+print(userAges.get(for: "Alice") ?? 0) // 25
+
+/*
+ 3- Класс Logger
+ Создай класс Logger, который принимает сообщения любого типа и сохраняет их в массив.
+
+ пример
+ let intLogger = Logger<Int>()
+ intLogger.add(1)
+ intLogger.add(2)
+ intLogger.showAll() // 1 2
+
+ let stringLogger = Logger<String>()
+ stringLogger.add("Start")
+ stringLogger.add("End")
+ stringLogger.showAll() // Start End
+ */
+
+class Logger<Element> {
+    private var storage: [Element] = []
+    
+    private var description: String {
+        storage.map { "\($0)" }.joined(separator: " ")
+    }
+    
+    func add(_ item: Element) {
+        storage.append(item)
+    }
+    
+    func showAll() {
+        print(description)
+    }
+}
+
+let intLogger = Logger<Int>()
+intLogger.add(1)
+intLogger.add(2)
+intLogger.showAll()
+
+let stringLogger = Logger<String>()
+stringLogger.add("Start")
+stringLogger.add("End")
+stringLogger.showAll() // Start End
+
+/*
+ 4 - Создай протокол Repository, который хранит данные любого типа (ассоциативный тип) и имеет методы save и getAll. Реализуй этот протокол для дженерик класса
+ */
+
+protocol Repository {
+    associatedtype T
+    
+    func save(_ element: T)
+    func getAll()
+}
+
+class Request<V>: Repository {
+    private var storage: [V] = []
+    
+    private var description: String {
+        storage.map { "\($0)" }.joined(separator: " ")
+    }
+    
+    func save(_ element: V) {
+        storage.append(element)
+    }
+    
+    func getAll() {
+        print(description)
+    }
+    
+    
+}
+
+let requestString = Request<String>()
+requestString.save("Hello")
+requestString.save("World")
+requestString.getAll()
+
+
+let requestInt = Request<Int>()
+requestInt.save(1)
+requestInt.save(3487)
+requestInt.getAll()
+
+
+
