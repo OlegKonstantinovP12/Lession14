@@ -92,12 +92,18 @@ print(makeDictionary(keys: ["a", "b"], values: [1, 2]))
  5 - Обобщённая структура Pair
  Создай структуру Pair, которая хранит два значения любого типа.
  */
-
+//MARK: - Вариант 1
 struct Pair<T> {
     var first: T
     var second: T
 }
 
+//MARK: - Вариант 2
+//В этом случае, первое и второе свойства, могут быть двух разных типов
+//struct Pair<T, V> {
+//    var first: T
+//    var second: V
+//}
 let pairString: Pair = Pair(first: "Hello", second: "World")
 let pairInt: Pair = Pair(first: 10, second: 1)
 let pairChar: Pair<Character> = Pair(first: "A", second: "B")
